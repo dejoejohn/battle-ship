@@ -58,7 +58,7 @@ public class BattleShip {
 		int counter = 0;
 		BattleShip battleShip = new BattleShip();
 		battleShip.setBattleShipPosition(new Random().nextInt(5), new Random().nextInt(5));
-		battleShip.getBattleShipPosition();
+		//battleShip.getBattleShipPosition();
 		int attackedPositionRow;
 		int attackedPositionColumn;
 		int triesCounter = 1;
