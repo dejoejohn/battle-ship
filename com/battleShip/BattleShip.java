@@ -7,11 +7,11 @@ public class BattleShip {
 	protected char board[][] = new char[5][5];
 	protected int battleShipPositionRow;
 	protected int battleShipPositionColumn;
-	
-	BattleShip(){
+
+	BattleShip() {
 		int counter = 0, counter1 = 0;
-		for(counter = 0; counter < 5; counter++){
-			for(counter1 = 0; counter1 < 5; counter1++){
+		for (counter = 0; counter < 5; counter++) {
+			for (counter1 = 0; counter1 < 5; counter1++) {
 				this.board[counter][counter1] = '*';
 			}
 		}
@@ -28,24 +28,22 @@ public class BattleShip {
 		System.out.print(",");
 		System.out.print(this.battleShipPositionColumn + "\n");
 	}
-	
-	public boolean attackBattleShip(BattleShip battleShip, int attackedPositionRow, 
-			int attackedPositionColumn){
-		
-		if(attackedPositionRow == this.battleShipPositionRow 
-				&& attackedPositionColumn == this.battleShipPositionColumn){
+
+	public boolean attackBattleShip(BattleShip battleShip, int attackedPositionRow, int attackedPositionColumn) {
+
+		if (attackedPositionRow == this.battleShipPositionRow
+				&& attackedPositionColumn == this.battleShipPositionColumn) {
 			battleShip.board[attackedPositionRow][attackedPositionColumn] = '0';
 			return true;
-		}
-		else {
+		} else {
 			battleShip.board[attackedPositionRow][attackedPositionColumn] = '^';
 		}
 		return false;
-		
+
 	}
 
 	public void printBoard(BattleShip battleShip) {
-		
+
 		for (int counter = 0; counter < 5; counter++) {
 			System.out.print("| ");
 			for (int counter1 = 0; counter1 < 5; counter1++) {
@@ -56,22 +54,35 @@ public class BattleShip {
 	}
 
 	public static void main(String[] args) {
-		int chances = 3; // Integer.parseInt(args[0]);
+		int chances = Integer.parseInt(args[0]);
 		int counter = 0;
 		BattleShip battleShip = new BattleShip();
 		battleShip.setBattleShipPosition(new Random().nextInt(5), new Random().nextInt(5));
-		//battleShip.getBattleShipPosition();
+		battleShip.getBattleShipPosition();
 		int attackedPositionRow;
 		int attackedPositionColumn;
 		int triesCounter = 1;
-		boolean isSuccessfullyBombed = false;
+		int attackedPosition[][] = new int[chances][2];
+		boolean isSuccessfullyBombed = false, isSamePositionAttacked = false;
 		Scanner scanner = new Scanner(System.in);
 		battleShip.printBoard(battleShip);
 		do {
 			System.out.println("Chances to find the battle ship remaining = " + (chances - counter));
 			System.out.println("Enter the positions to attack (row,col): ");
 			attackedPositionRow = scanner.nextInt();
-			attackedPositionColumn= scanner.nextInt();
+			attackedPositionColumn = scanner.nextInt();
+			for (int counter1 = 0; counter1 < triesCounter; counter1++) {
+				if (attackedPositionRow == attackedPosition[counter1][0]
+						&& attackedPositionColumn == attackedPosition[counter1][1]) {
+					isSamePositionAttacked = true;
+				}
+			}
+			if (isSamePositionAttacked) {
+				System.out.println("You cannot attack the same position.");
+				continue;
+			}
+			attackedPosition[triesCounter - 1][0] = attackedPositionRow;
+			attackedPosition[triesCounter - 1][1] = attackedPositionColumn;
 			while (attackedPositionRow > 4 || attackedPositionColumn > 4) {
 				if (triesCounter <= 3) {
 					System.out.println(
@@ -84,10 +95,9 @@ public class BattleShip {
 					Runtime.getRuntime().exit(0);
 				}
 			}
-			
-			isSuccessfullyBombed = battleShip.attackBattleShip(battleShip, attackedPositionRow, 
-										attackedPositionColumn);
-			
+
+			isSuccessfullyBombed = battleShip.attackBattleShip(battleShip, attackedPositionRow, attackedPositionColumn);
+
 			if (isSuccessfullyBombed) {
 				System.out.println("You sank the Battle Ship!");
 				battleShip.printBoard(battleShip);
@@ -97,7 +107,7 @@ public class BattleShip {
 			counter++;
 
 		} while (counter < chances);
-		if(counter >= chances){
+		if (counter >= chances) {
 			System.out.println("You need to work on your aim. So long, Sailor!");
 		}
 		scanner.close();
